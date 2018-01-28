@@ -36,3 +36,17 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
 # This requires extra memory and should be disabled if not needed
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 # ----------------------------------------------------------------------------#
+#  LDAP settings
+# --------------------------LDAP settings-------------------------------#
+LDAP_PROVIDER_URL = "ldap://192.168.56.16:389"
+LDAP_BASE_DN = "ou=users,dc=test,dc=com"
+LDAP_USER_DN = "cn={username},ou=users,dc=test,dc=com"
+LDAP_RETRIVE_ATTRS = ['givenName', 'sn', 'mail', 'uid']
+LDAP_ATTRS_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail",
+    "user": "uid",
+}
+LDAP_SEARCH_FILTER = "uid={username}"
+# ----------------------------------------------------------------------------#
