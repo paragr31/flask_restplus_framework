@@ -43,10 +43,10 @@ LDAP_BASE_DN = "ou=users,dc=test,dc=com"
 LDAP_USER_DN = "cn={username},ou=users,dc=test,dc=com"
 LDAP_RETRIVE_ATTRS = ['givenName', 'sn', 'mail', 'uid']
 LDAP_ATTRS_MAP = {
-    "first_name": "givenName",
-    "last_name": "sn",
-    "email": "mail",
-    "user": "uid",
+    "givenName": "first_name",
+    "sn": "last_name",
+    "mail": "email",
+    "uid": "user",
 }
 LDAP_SEARCH_FILTER = "uid={username}"
 # ----------------------------------------------------------------------------#

@@ -9,17 +9,27 @@ if platform.system() == "Windows" and path not in sys.path:
     sys.path.append(path)
 
 from os import path
-from flask import Flask, Blueprint
+from flask import Flask, Blueprint, g
+from flask_login import current_user
 from rest_example import config
 from rest_example.api.myapp.views import ns as crs_namespace
+from rest_example.api.login.views import ns as login_namespace
+from rest_example.api.login import login_manager
 from rest_example.api.restapi import api
 from rest_example.database import db
 
 app = Flask(__name__)
 
+
+@app.before_request
+def get_current_user():
+    g.user = current_user
+
+
 log_file_path = path.join(path.dirname(path.abspath(__file__)), 'logging.conf')
 logging.config.fileConfig(log_file_path)
 log = logging.getLogger(__name__)
+
 
 def configure_app(flask_app):
     flask_app.config['SERVER_NAME'] = config.FLASK_SERVER_NAME
@@ -36,9 +46,12 @@ def initialize_app(flask_app):
     blueprint = Blueprint('api', __name__, url_prefix='/api')
     api.init_app(blueprint)
     api.add_namespace(crs_namespace)
+    api.add_namespace(login_namespace)
     flask_app.register_blueprint(blueprint)
 
     db.init_app(flask_app)
+    login_manager.init_app(flask_app)
+
 
 def main():
     initialize_app(app)

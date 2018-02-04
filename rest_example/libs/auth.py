@@ -20,6 +20,7 @@ class AuthLdap():
         self.retrieveAttributes = conf.LDAP_RETRIVE_ATTRS
         self.searchFilter = conf.LDAP_SEARCH_FILTER
         self.searchScope = ldap.SCOPE_SUBTREE
+        self.ldapAttrMap = conf.LDAP_ATTRS_MAP
         ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, False)
         self.connection = ldap.initialize(self.ldap_url)
 
@@ -38,7 +39,15 @@ class AuthLdap():
 
         return result
 
+    def mapUserData(self, data):
+        userDetails = {}
+        for key in list(data['SearchResult'].keys()):
+            userDetails[self.ldapAttrMap[key]] = data['SearchResult'][key][0]
+        return userDetails
+
     def getUser(self, user, passwd):
+        userDetails = {}
         data = self.searchUser(user, passwd)
         if 'SearchResult' in data and data['SearchResult']:
-            
+            userDetails = self.mapUserData(data)
+        return userDetails
